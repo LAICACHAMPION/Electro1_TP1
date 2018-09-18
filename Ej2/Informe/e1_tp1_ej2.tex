@@ -9,7 +9,7 @@
 \chapter{}
 
 
-En este ejercicio, se estudi\'o el comportamiento de un transistor NPN en el siguiente circuito:
+En este ejercicio, se estudi\'o el comportamiento de un transistor NPN en el siguiente circuito con emisor com\'un:
 
 \begin{figure}[H]
 
@@ -17,33 +17,29 @@ En este ejercicio, se estudi\'o el comportamiento de un transistor NPN en el sig
  	\begin{circuitikz}
  	\draw 
  	(3.5,1) node[npn] (npn) {}
+ 
+ 	(npn.B) to [short, -*] (2.0,1)
+ 	to [C, l_=$C_{in}$, -*] (0.5,1) node[above]{$V_{in}$}
+ 	to [R, l_=$R_G$] (-1.5,1)
+ 	to [american voltage source=$V_{G}$] (-1.5,-1.5) 
  	
- %	(-1,-1.5) to [american voltage source=$V_{G}$] (-1,1)
- %	to [R, l_=$R_G$](1,1) node[above]{$V_{in}$}
- %	to [C, l_=$C_{in}$](2.5,1)
- %	to [short, *-] (npn.B) 
- 	(npn.B) to [short, -*] (2.5,1)
- 	to [C, l_=$C_{in}$] (1,1) node[above]{$V_{in}$}
- 	to [R, l_=$R_G$] (-1,1)
- 	to [american voltage source=$V_{G}$] (-1,-1.5) 
- 	
- 	
- 	(2.5,1) to [R=$R_1$] (2.5, 3.5)
- 	to [short] (-1,3.5)
- 	to[american voltage source = $V_{CC}$] (-1,2) node[ground]{}
+ 	(2,1) to [R, l_=$R_2$] (2.0,-1.5)
+ 	(2,1) to [R=$R_1$] (2.0, 3.5)
+ 	to [short] (-1.5,3.5)
+ 	to[american voltage source = $V_{CC}$] (-1.5,2) node[ground]{}
  	
  	(npn.E) to [R, l_= $R_E$] (3.5,-1.5)
  	(3.5,0.5) to [short, *-](5,0.5)
  	to [C, l_=$C_E$](5,-1.5)
  	
  	(npn.C) to [R, l_=$R_C$] (3.5,3.5)
- 	to [short, -*] (2.5,3.5)
+ 	to [short, -*] (2,3.5)
  	
- 	(3.5,1.5) to [C=$C_{out}$, *-] (6,1.5)
+ 	(3.5,1.5) to [C=$C_{out}$, *-*] (6,1.5) node[right]{$V_{out}$}
  	to [R= $R_L$] (6,-1.5)
  	to [short, -*] (5,-1.5)
  	to [short, -*] (3.5,-1.5)
- 	to [short] (-1,-1.5) node[ground]{}
+ 	to [short] (-1.5,-1.5) node[ground]{}
  	
  	;\end{circuitikz}
  	
@@ -52,10 +48,95 @@ En este ejercicio, se estudi\'o el comportamiento de un transistor NPN en el sig
 
 En particular, el modelo de transistor utilizado fue el BC547\footnote{La hoja de datos de este transistor puede encontrarse en el siguiente link: \url{ https://www.sparkfun.com/datasheets/Components/BC546.pdf}}.\par
 
-En cuanto a los dem\'as componentes, los valores fueron los siguientes:
+Los valores de los componentes pasivos son los siguientes:
 
-\todo[inline]{valores pedidos por la consigna vs medidos}
 
-La resistencia $R_G$ se encuentra excluida de estas consideraciones puesto a que es la resistencia interna del generador, cuyo valor est\'andar es $50\Omega$.\par
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|c|c|c|c|c|c|c|c|}
+	\hline
+	$R_1$        &	$R_2$	& $R_C$        & $R_E$       & $R_L$       & $C_{in}$ & $C_{out}$ & $C_{E}$  \\ \hline
+	$100k\Omega$ & $8.2k\Omega$ & $5.6k\Omega$ & $250\Omega$ & 10$k\Omega$ & 10$nF$   & $10nF$    & $1\mu F$ \\ \hline
+	\end{tabular}
+	\caption{Valores de las resistencias y los capacitores utilizados}
+\end{table}
+
+
+La resistencia $R_G$ se encuentra excluida de estas consideraciones puesto a que es la resistencia interna del generador, cuyo valor est\'andar es $50\Omega$. A su vez, el transistor se aliment\'o con $V_{CC}=12V$ \par
+
+
+
+\section{An\'alisis te\'orico}
+
+\subsection{Polarizaci\'on}
+Como la polarizaci\'on del transistor se realiza en continua, no circula corriente por las ramas del circuito donde hay capacitores. Por lo tanto, se puede simplificar de la siguiente manera:
+
+\begin{figure}[H]
+	\centering
+ 	\begin{circuitikz}
+ 	\draw 
+ 	(3.5,1) node[npn] (npn) {}
+
+ 	(npn.B) to [short, -*] (2.0,1) 	
+ 	to [R, l_=$R_2$] (2.0,-1.5) node[ground]{}
+ 	
+ 	(2,1) to [R=$R_1$] (2.0, 3.5)
+ 	to [short] (-1.5,3.5)
+ 	to[american voltage source = $V_{CC}$] (-1.5,2) node[ground]{}
+ 	
+ 	(npn.E) to [R= $R_E$] (3.5,-1.5)
+ 	to [short, -*](2.0,-1.5)
+ 	
+ 	(npn.C) to [R, l_=$R_C$] (3.5,3.5)
+ 	to [short, -*] (2,3.5)
+ 	
+
+ 	;\end{circuitikz}
+ 	
+ 	\caption{Esquema del circuito en continua}
+\end{figure}
+
+Aplicaremos el teorema de Th\'evenin para resolverlo, es decir para obtener $I_{B_q} = $. Aplicando un divisor resistivo para la tensi\'on de Th\'evenin, y pasivando $V_{CC}$ y considerando que por la resistencia $R_E$ pasa $I_E=I_C+I_B=I_B\cdot(h_{FE}+1)$, el circuito resultante es el siguiente:\par
+
+\begin{figure}[H]
+\centering
+	\label{fig:th}
+ 	\begin{subfigure}[t]{0.5\linewidth}
+ 		\begin{circuitikz}
+ 		\draw 
+	 	(3.5,1) node[npn] (npn) {}
+ 		(npn.B) to [R=$R_{Th}$] (-1,1)
+ 		to [american voltage source = $V_{Th}$] (-1,-1.5) node[ground]{}
+ 
+ 		(npn.E) to [R, l_= $R_E \cdot (1+h_{FE})$] (3.5,-1.5)
+ 		to [short, -*](-1,-1.5)
+ 		;\end{circuitikz}
+ 	\end{subfigure}
+
+	\begin{subfigure}[t]{0.2\linewidth}
+
+	\end{subfigure}
+
+ 	\caption{Circuito de Th\'evenin en continua}
+\end{figure}
+
+En la figura (\ref{fig:th}), $R_{Th} =\frac{R_1 \cdot R_2}{R_1+R_2} = ...$ y $V_{Th} = \left( \frac{R_2}{R_1 + R_2} \right) \cdot V_{CC} = ...$. De esta manera obtenemos que los valores de las corrientes de polarizaci\'on son:
+
+	
+ \[\left\{
+\begin{aligned}
+		I_{Bq} &=\frac{V_{Th}-V_{BE_{ON}}}{R_{Th} + R_E \cdot (1+h_{FE})} &= ... \\
+		\\
+		I_{Cq} &= h_{FE} \cdot I_{Bq} =  \frac{V_{Th}-V_{BE_{ON}}}{ \frac{R_{Th}}{h_{FE}} + R_E \cdot 						\left(\frac{1+h_{FE}}{h_{FE}}\right)} &= ...
+ \end{aligned}
+ \right.\]
+ 	
+\subsection{Modelo incremental}
+
+\subsection{Circuito incremental}
+
+Aca se deber\'ia concluir el comportamiento en 
+
 
 \end{document}
+
