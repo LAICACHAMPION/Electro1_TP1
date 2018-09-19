@@ -4,12 +4,12 @@
 
 \begin{document}
 
-\newgeometry{left =1.5cm, right=1.5cm, top=1.5cm, bottom=2cm}
+\newgeometry{left =2cm, right=2cm, top=2cm, bottom=2cm}
 
 \chapter{}
 
 
-En este ejercicio, se estudi\'o el comportamiento de un transistor NPN en el siguiente circuito:
+En este ejercicio, se estudi\'o el comportamiento de un transistor NPN en el siguiente circuito con emisor com\'un:
 
 \begin{figure}[H]
 
@@ -17,45 +17,237 @@ En este ejercicio, se estudi\'o el comportamiento de un transistor NPN en el sig
  	\begin{circuitikz}
  	\draw 
  	(3.5,1) node[npn] (npn) {}
+ 
+ 	(npn.B) to [short, -*] (2.0,1)
+ 	to [C, l_=$C_{in}$, -*] (0.5,1) node[above]{$V_{in}$}
+ 	to [R, l_=$R_G$] (-1.5,1)
+ 	to [sinusoidal voltage source=$V_{G}$] (-1.5,-1.5) 
  	
- %	(-1,-1.5) to [american voltage source=$V_{G}$] (-1,1)
- %	to [R, l_=$R_G$](1,1) node[above]{$V_{in}$}
- %	to [C, l_=$C_{in}$](2.5,1)
- %	to [short, *-] (npn.B) 
- 	(npn.B) to [short, -*] (2.5,1)
- 	to [C, l_=$C_{in}$] (1,1) node[above]{$V_{in}$}
- 	to [R, l_=$R_G$] (-1,1)
- 	to [american voltage source=$V_{G}$] (-1,-1.5) 
- 	
- 	
- 	(2.5,1) to [R=$R_1$] (2.5, 3.5)
- 	to [short] (-1,3.5)
- 	to[american voltage source = $V_{CC}$] (-1,2) node[ground]{}
+ 	(2,1) to [R, l_=$R_2$] (2.0,-1.5)
+ 	(2,1) to [R=$R_1$] (2.0, 3.5)
+ 	to [short] (-1.5,3.5)
+ 	to[american voltage source = $V_{CC}$] (-1.5,2) node[ground]{}
  	
  	(npn.E) to [R, l_= $R_E$] (3.5,-1.5)
  	(3.5,0.5) to [short, *-](5,0.5)
  	to [C, l_=$C_E$](5,-1.5)
  	
  	(npn.C) to [R, l_=$R_C$] (3.5,3.5)
- 	to [short, -*] (2.5,3.5)
+ 	to [short, -*] (2,3.5)
  	
- 	(3.5,1.5) to [C=$C_{out}$, *-] (6,1.5)
+ 	(3.5,1.5) to [C=$C_{out}$, *-*] (6,1.5) node[right]{$V_{out}$}
  	to [R= $R_L$] (6,-1.5)
  	to [short, -*] (5,-1.5)
  	to [short, -*] (3.5,-1.5)
- 	to [short] (-1,-1.5) node[ground]{}
+ 	to [short] (-1.5,-1.5) node[ground]{}
  	
  	;\end{circuitikz}
  	
  	\caption{Esquema del circuito}
 \end{figure}
 
-En particular, el modelo de transistor utilizado fue el BC547\footnote{La hoja de datos de este transistor puede encontrarse en el siguiente link: \url{ https://www.sparkfun.com/datasheets/Components/BC546.pdf}}.\par
+En particular, el modelo de transistor utilizado fue el BC547\footnote{La hoja de datos de este transistor puede encontrarse en el siguiente link: \url{ https://www.sparkfun.com/datasheets/Components/BC546.pdf}}. Su $h_{fe}$, medido con mult\'imetro, es de 569.\par
 
-En cuanto a los dem\'as componentes, los valores fueron los siguientes:
+Los valores de los componentes pasivos son los siguientes:
 
-\todo[inline]{valores pedidos por la consigna vs medidos}
 
-La resistencia $R_G$ se encuentra excluida de estas consideraciones puesto a que es la resistencia interna del generador, cuyo valor est\'andar es $50\Omega$.\par
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|c|c|c|c|c|c|c|c|}
+	\hline
+	$R_1$        &	$R_2$	& $R_C$        & $R_E$       & $R_L$       & $C_{in}$ & $C_{out}$ & $C_{E}$  \\ \hline
+	$100k\Omega$ & $8.2k\Omega$ & $5.6k\Omega$ & $250\Omega$ & 10$k\Omega$ & 10$nF$   & $10nF$    & $1\mu F$ \\ \hline
+	\end{tabular}
+	\caption{Valores de las resistencias y los capacitores utilizados}
+\end{table}
+
+
+La resistencia $R_G$ se encuentra excluida de estas consideraciones puesto a que es la resistencia interna del generador, cuyo valor est\'andar es $50\Omega$. A su vez, el transistor se aliment\'o con $V_{CC}=12V$ \par
+
+
+
+\section{An\'alisis te\'orico}
+
+A continuaci\'on obtendremos la respuesta para se\~nales de frecuencia media (donde los capacitores pueden considerarse cables) del circuito. Si bien con este m\'etodo no podremos obtener la respuesta en frecuencia del circuito, se espera que el valor m\'aximo de ganancia coincida con el calculado aqu\'i.
+
+\subsection{Polarizaci\'on}
+Como la polarizaci\'on del transistor se realiza en continua, no circula corriente por las ramas del circuito donde hay capacitores. Por lo tanto, se puede simplificar de la siguiente manera:
+
+\begin{figure}[H]
+	\centering
+ 	\begin{circuitikz}
+ 	\draw 
+ 	(3.5,1) node[npn] (npn) {}
+
+ 	(npn.B) to [short, -*] (2.0,1) 	
+ 	to [R, l_=$R_2$] (2.0,-1.5) node[ground]{}
+ 	
+ 	(2,1) to [R=$R_1$] (2.0, 3.5)
+ 	to [short] (-1.5,3.5)
+ 	to[american voltage source = $V_{CC}$] (-1.5,2) node[ground]{}
+ 	
+ 	(npn.E) to [R= $R_E$] (3.5,-1.5)
+ 	to [short, -*](2.0,-1.5)
+ 	
+ 	(npn.C) to [R, l_=$R_C$] (3.5,3.5)
+ 	to [short, -*] (2,3.5)
+ 	
+
+ 	;\end{circuitikz}
+ 	
+ 	\caption{Esquema del circuito en continua}
+\end{figure}
+
+Aplicaremos el teorema de Th\'evenin para resolverlo, es decir para obtener $I_{B_q} = $. Aplicando un divisor resistivo para la tensi\'on de Th\'evenin, y pasivando $V_{CC}$ y considerando que por la resistencia $R_E$ pasa $I_E=I_C+I_B=I_B\cdot(h_{FE}+1)$, el circuito resultante es el siguiente:\par
+
+\begin{figure}[H]
+\centering
+ 		\begin{circuitikz}
+ 		\draw 
+	 	(3.5,1) node[npn] (npn) {}
+ 		(npn.B) to [R=$R_{Th}$] (-1,1)
+ 		to [american voltage source = $V_{Th}$] (-1,-1.5) node[ground]{}
+ 
+ 		(npn.E) to [R, l_= $R_E \cdot (1+h_{FE})$] (3.5,-1.5)
+ 		to [short, -*](-1,-1.5)
+ 		;\end{circuitikz}
+ 	\caption{Circuito de Th\'evenin en continua}
+\end{figure}
+
+En la figura (\ref{fig:th}), $R_{Th} =\frac{R_1 \cdot R_2}{R_1+R_2} = 7.579k\Omega.$ y $V_{Th} = \left( \frac{R_2}{R_1 + R_2} \right) \cdot V_{CC} = 0.909V$. De esta manera obtenemos que los valores de las corrientes de polarizaci\'on son:
+
+	
+ \[\left\{
+\begin{aligned}
+		I_{Bq} &=\frac{V_{Th}-V_{BE_{ON}}}{R_{Th} + R_E \cdot (1+h_{FE})} &= 1.467nA \\
+		\\
+		I_{Cq} &= h_{FE} \cdot I_{Bq} =  \frac{V_{Th}-V_{BE_{ON}}}{ \frac{R_{Th}}{h_{FE}} + R_E \cdot 						\left(\frac{1+h_{FE}}{h_{FE}}\right)} &= 835nA
+ \end{aligned}
+ \right.\]
+ 
+ \todo[inline]{CALCULAR VTH, RTH, ICQ, IBQ, DECIR QUE QUEDAN EN LOS PARAMETROS DE BLABLABLA}
+ 
+ 
+ 	
+\subsection{Modelo incremental}
+
+Los par\'ametros que utilizaremos en el circuito incremental son los h\'ibridos. Para ello necesitaremos los valores de las tensiones $V_T$ y $V_A$. En cuanto a la primera, se considera que la misma vale $26mV$ pues se trabaja a temperatura ambiente. La tensi\'on de Early, por otro lado, la extrapolaremos de los gr\'aficos de $I_C(V_{CE})$ aportados por el fabricante.
+
+\begin{figure} [H]
+	\centering
+	\includegraphics[scale=0.8]{imagenes/early.jpg}
+	\caption{Curvas caracter\'isticas de la hoja de datos e interpolaci\'on lineal}
+\end{figure}
+
+La recta resaltada en celeste en la figura anterior intersecta al eje \textit{x} en $V_{CE}=-V_A$. Dado que su coordenada de origen es $I_{C0}\sim 68mA$, y su pendiente es $r_{ce}\sim \frac{8V}{80mA-68mA} = 667\Omega$, resulta que el valor de la tensi\'on de Early para este transistor es $V_A = r_{ce} \cdot I_{C0} \sim 45.33V$.\par
+
+Habiendo determinado estos valores, los par\'ametros h\'ibridos resultan ser:
+
+ \[\left\{
+\begin{aligned}
+	h_{ie}= (h_{FE}+1) \cdot \frac{V_T}{I_{Cq}} = 17.75M\Omega\\
+	\frac{1}{h_{oe}} = r_{oe} = \frac{V_A}{I_{Cq}} = 54.29M\Omega
+ \end{aligned}
+ \right.\]
+
+
+\subsection{Circuito incremental}
+
+Considerando que la frecuencia es lo suficientemente grande como para que la impedancia de los capacitores sea despreciable, el circuito queda planteado de la siguiente manera:
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}
+	\draw
+	(0,2) to [sinusoidal voltage source = $V_{G}$] (0,0)
+	(0,2) to [R = $R_G$] (2,2) node[above] {$V_{in}$}
+	to [R = $R_{Th}$, *-*] (2,0)
+	
+	(2,2) to [short] (3.5,2)
+	to [R = $h_{ie}$, -*, i>^=$i_b$] (3.5, 0)
+	
+	(6.5,2) to [dcisource,  l_= $h_{fe} \cdot i_b$] (6.5,0)
+	to [short, *-*] (8,0)
+	to [R, l_= $r_{oe}$, *-*] (8,2)
+	(10,2) to [R=$R_C$, *-*] (10,0)
+	
+	(6.5,2) to [short, -*] (11.5,2) node[right]{$V_{out}$}
+	to [R = $R_L$] (11.5,0)
+	to [short] (0,0)
+
+	;\end{circuitikz}
+	
+	\caption{Circuito con los capacitores en cortocircuito}
+\end{figure}
+
+Debido a que $r_{oe}\gg R_C\parsum R_L $, despreciamos sus efectos en el circuito. Las impedancias de este circuito son entonces:
+
+\begin{equation}
+	\left\{
+		\begin{aligned}
+			R_D &= R_C\parsum R_L &= 3.590k\Omega\\
+			R_{ia} &= R_{Th}\parsum h_{ie}  \sim R_{Th} &= 7.579k\Omega\\
+			R_{oa} &= \frac{h_{fe} \cdot i_b \cdot R_C}{h_{fe} \cdot i_b}  = R_C &= 5.6k\Omega\\
+		\end{aligned}
+	\right.
+\end{equation}
+
+La ganancia en tensi\'on se obtiene entonces como:
+
+\begin{equation}
+	\Delta_{V} = \frac{V_{out}}{V_{in}} = \frac{i_b \cdot h_{fe} \cdot R_D}{i_b\cdot R_{ia}} = \frac{h_{fe}\cdot R_D}{R_{ia}} = 270 = 49dB
+\end{equation}
+
+
+
+
+
+\section{Resultados y an\'alisis}
+
+\subsection{Respuesta en frecuencia}
+
+\begin{figure} [H]
+	\centering
+	\begin{subfigure}[c]{\textwidth}
+		\centering
+		\includegraphics[scale=0.65]{imagenes/e1_tp1_ej2_hf_mag.png}
+	\end{subfigure}
+	
+	
+	\begin{subfigure}[c]{\textwidth}
+		\centering
+		\includegraphics[scale=0.65]{imagenes/e1_tp1_ej2_hf_fase.png}
+	\end{subfigure}
+	
+	\caption{Diagrama de bode de la respuesta en frecuencia}
+\end{figure}
+
+
+
+
+\subsection{Impedancia de entrada}
+
+\begin{figure} [H]
+	\centering
+	\includegraphics[scale=0.65]{imagenes/e1_tp1_ej2_zin_mag.png}	
+	\caption{Diagrama de bode de la impedancia de entrada}
+\end{figure}
+
+
+\subsection{Impedancia de salida}
+
+
+\begin{figure} [H]
+	\centering
+	\includegraphics[scale=0.65]{imagenes/e1_tp1_ej2_zout_mag.png}	
+	\caption{Diagrama de bode de la impedancia de entrada}
+\end{figure}
+
+
+
+
+\section{Conclusiones}
+
 
 \end{document}
+
