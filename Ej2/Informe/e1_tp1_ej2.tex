@@ -4,9 +4,7 @@
 
 \begin{document}
 
-\newgeometry{left =2cm, right=2cm, top=2cm, bottom=2cm}
-
-\chapter{}
+\chapter{Circuito con transistor}
 
 
 En este ejercicio, se estudi\'o el comportamiento de un transistor NPN en el siguiente circuito con emisor com\'un:
@@ -98,7 +96,7 @@ Como la polarizaci\'on del transistor se realiza en continua, no circula corrien
  	\caption{Esquema del circuito en continua}
 \end{figure}
 
-Aplicaremos el teorema de Th\'evenin para resolverlo, es decir para obtener $I_{Cq} = h_{fe}\cdot I_{Bq}$. Aplicando un divisor resistivo obtenemos que $V_{Th} = \left( \frac{R_2}{R_1 + R_2} \right) \cdot V_{CC} = 0.909V$, con $R_{Th} =\frac{R_1 \cdot R_2}{R_1+R_2} = 7.579k\Omega$. Considerando que por la resistencia $R_E$ pasa $I_E=I_C+I_B=I_B\cdot(h_{FE}+1)$, el circuito resultante es entonces el siguiente:\par
+Aplicaremos el teorema de Th\'evenin para resolverlo, es decir para obtener $I_{Cq} = h_{fe}\cdot I_{Bq}$. Aplicando un divisor de tensi\'on, obtenemos que $V_{Th} = \left( \frac{R_2}{R_1 + R_2} \right) \cdot V_{CC} = 0.909V$, con $R_{Th} =\frac{R_1 \cdot R_2}{R_1+R_2} = 7.579k\Omega$. Considerando que por la resistencia $R_E$ pasa $I_E=I_C+I_B=I_B\cdot(h_{FE}+1)$, el circuito resultante es entonces el siguiente:\par
 
 \begin{figure}[H]
 	\centering
@@ -126,7 +124,7 @@ De esta manera obtenemos que los valores de las corrientes de polarizaci\'on son
  \end{aligned}
  \right.\]
  
- Con estas corrientes tan peque\~nas, la tensi\'on $V_{CE}$ es pr\'acticamente id\'entica a $V_{CC}=12V$, con lo cual estamos en el rango admitido por el fabricante para este par\'ametro (entre $45V$ de m\'aximo y $0.9V$ de saturaci\'on). En cuanto a la potencia, puesto que este transistor puede disipar hasta $500mW$ tampoco nos preocupa, y lo mismo con los $100mA$ m\'aximos para $I_C$. Por \'ultimo, siendo que la \textit{cut-off current} de este transistor es de $15nA$, se puede concluir que se est\'a trabajando en la \textit{safe operation area} para polarizaci\'on activa directa.
+ Con estas corrientes tan peque\~nas, la tensi\'on $V_{CE}$ es pr\'acticamente id\'entica a $V_{CC}=12V$, con lo cual estamos en el rango admitido por el fabricante para este par\'ametro (entre $45V$ de m\'aximo y $0.9V$ de saturaci\'on). En cuanto a la potencia, puesto que este transistor puede disipar hasta $500mW$ tampoco nos preocupa, y lo mismo con los $100mA$ m\'aximos para $I_C$. Por \'ultimo, siendo que la \textit{cut-off current} de este transistor es de $15nA\ll I_{Cq}$, se puede concluir que se est\'a trabajando en la \textit{safe operation area} para polarizaci\'on activa directa.
   
  
  	
@@ -212,8 +210,8 @@ Si quisi\'esemos considerar la dependencia de la frecuencia para las impedancias
 
 
 \begin{figure} [H]
-	\centering
 	\label{fig:2-hf}
+	\centering
 	\begin{subfigure}[c]{\textwidth}
 		\centering
 		\includegraphics[scale=0.65]{imagenes/e1_tp1_ej2_hf_mag.png}
@@ -228,7 +226,7 @@ Si quisi\'esemos considerar la dependencia de la frecuencia para las impedancias
 	\caption{Diagrama de bode de la respuesta en frecuencia}
 \end{figure}
 
-Las mediciones de ganancia en tensi\'on graficadas en la figura \ref{fig:2-hf} coinciden con lo simulado en \textit{LtSpice}. Se observa que inicialmente la ganancia crece $40dB$ por d\'ecada, y luego este crecimiento se ve limitado por un polo de segundo orden con $f_0 \sim 6k\Omega$ (donde la fase es aproximadamente $90^\circ$). As\'i para $f\gg 6k\Omega$, la ganancia se estabiliza en $42dB$. \par
+Las mediciones de ganancia en tensi\'on coinciden con lo simulado en \textit{LtSpice}. Se observa que inicialmente la ganancia crece $40dB$ por d\'ecada, y luego este crecimiento se ve limitado por un polo de segundo orden con $f_0 \sim 6k\Omega$ (donde la fase es aproximadamente $90^\circ$). As\'i para $f\gg 6k\Omega$, la ganancia se estabiliza en $42dB$. \par
 
 Esto es considerablemente inferior a los $49dB$ obtenidos en la ecuaci\'on (\ref{eq:2-ganancia}). Esto podr\'ia deberse a que en esos c\'alculos se consider\'o que el valor de $h_{fe}$ era el mismo para continua que para frecuencias medias, y no necesariamente es este el caso. Asumiendo que la expresi\'on de $\Delta_V$ utilizada es v\'alida, las mediciones indicar\'ian que el valor de $h_{fe}$ en alterna es 338. Si este fuese el caso, las aproximaciones utilizadas para calcular las impedancias en (\ref{eq:2-impedancias}) a\'un pueden utilizarse, lo cual confirma que la expresi\'on de la ganancia se conserva. Considerando que la hoja de datos informa que $110 \leq h_{fe} \leq 800$, este resultado est\'a dentro de lo admitido por el fabricante.
 
